@@ -294,7 +294,7 @@ export default function DeviceInfoCard() {
 
   if (loading) {
     return (
-      <Card className="w-full shadow-lg">
+      <Card className="w-full shadow-lg" data-testid="device-info-card">
         <CardHeader className="pb-4">
           <CardTitle className="flex items-center gap-2 text-lg">
             <Monitor className="h-5 w-5 text-primary" />
@@ -420,7 +420,7 @@ export default function DeviceInfoCard() {
   ];
 
   return (
-    <Card className="w-full shadow-lg">
+    <Card className="w-full shadow-lg" data-testid="device-info-card">
       <CardHeader className="pb-4">
         <CardTitle className="flex items-center gap-2 text-lg">
           <Monitor className="h-5 w-5 text-primary" />
@@ -446,7 +446,7 @@ export default function DeviceInfoCard() {
                   <div className="text-xs font-medium text-muted-foreground mb-1">
                     {item.label}
                   </div>
-                  <div className="text-sm font-semibold truncate">
+                  <div className="text-sm font-semibold overflow-x-auto whitespace-nowrap scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
                     {item.value}
                   </div>
                 </div>

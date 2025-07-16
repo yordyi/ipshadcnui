@@ -240,7 +240,7 @@ export default function SummaryCard() {
   ];
 
   return (
-    <Card className="w-full shadow-lg">
+    <Card className="w-full shadow-lg" data-testid="summary-card">
       <CardHeader className="pb-4">
         <CardTitle className="flex items-center gap-2 text-lg">
           <FileText className="h-5 w-5 text-primary" />

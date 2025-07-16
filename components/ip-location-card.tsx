@@ -87,7 +87,7 @@ export default function IPLocationCard() {
 
   if (loading) {
     return (
-      <Card className="w-full shadow-lg border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-background">
+      <Card className="w-full shadow-lg border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-background" data-testid="ip-location-card">
         <CardContent className="p-6">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
@@ -121,7 +121,7 @@ export default function IPLocationCard() {
   }
 
   return (
-    <Card className="w-full shadow-lg border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-background">
+    <Card className="w-full shadow-lg border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-background" data-testid="ip-location-card">
       <CardContent className="p-6">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
