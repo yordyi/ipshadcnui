@@ -372,19 +372,22 @@ export default function SummaryCard() {
 
   if (loading) {
     return (
-      <Card className="w-full">
-        <CardHeader className="pb-2">
-          <CardTitle className="flex items-center gap-2 text-base">
-            <FileText className="h-4 w-4" />
-            Summary
+      <Card className="w-full shadow-lg">
+        <CardHeader className="pb-4">
+          <CardTitle className="flex items-center gap-2 text-lg">
+            <FileText className="h-5 w-5 text-primary" />
+            <span>Network Summary</span>
           </CardTitle>
         </CardHeader>
         <CardContent className="pt-0">
-          <div className="animate-pulse space-y-2">
+          <div className="space-y-3">
             {[...Array(15)].map((_, i) => (
-              <div key={i} className="flex justify-between items-center p-2 rounded-lg bg-gray-50">
-                <div className="h-3 bg-gray-200 rounded w-1/3"></div>
-                <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+              <div key={i} className="flex items-center justify-between p-3 rounded-lg bg-muted/30 border border-border">
+                <div className="flex items-center gap-3">
+                  <div className="h-4 w-4 bg-muted rounded animate-pulse"></div>
+                  <div className="h-3 bg-muted rounded w-20 animate-pulse"></div>
+                </div>
+                <div className="h-3 bg-muted rounded w-24 animate-pulse"></div>
               </div>
             ))}
           </div>
@@ -476,28 +479,26 @@ export default function SummaryCard() {
   ];
 
   return (
-    <Card className="enhanced-card w-full">
-      <CardHeader className="enhanced-card-header pb-4">
-        <CardTitle className="flex items-center gap-3 text-lg">
-          <div className="info-icon">
-            <FileText className="h-5 w-5" />
-          </div>
-          <span className="text-gradient">Network Summary</span>
+    <Card className="w-full shadow-lg">
+      <CardHeader className="pb-4">
+        <CardTitle className="flex items-center gap-2 text-lg">
+          <FileText className="h-5 w-5 text-primary" />
+          <span>Network Summary</span>
         </CardTitle>
       </CardHeader>
       <CardContent className="pt-0">
         <div className="space-y-3">
           {summaryItems.map((item, index) => (
-            <div key={index} className="summary-item" style={{"--stagger-delay": index} as React.CSSProperties}>
+            <div key={index} className="flex items-center justify-between p-3 rounded-lg bg-muted/30 border border-border hover:bg-muted/50 transition-colors">
               <div className="flex items-center gap-3">
-                <div className="info-icon text-purple-600 dark:text-purple-400">
+                <div className="text-purple-600 dark:text-purple-400 p-1 rounded">
                   {item.icon}
                 </div>
-                <span className="text-xs font-medium text-secondary-enhanced">
+                <span className="text-xs font-medium text-muted-foreground">
                   {item.label}
                 </span>
               </div>
-              <div className="text-sm font-semibold text-enhanced text-right max-w-[60%] truncate">
+              <div className="text-sm font-semibold text-right max-w-[60%] truncate">
                 {item.value}
               </div>
             </div>

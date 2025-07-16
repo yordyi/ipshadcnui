@@ -637,26 +637,24 @@ export default function BrowserFingerprintCard() {
 
   if (loading) {
     return (
-      <Card className="enhanced-card w-full">
-        <CardHeader className="enhanced-card-header pb-4">
-          <CardTitle className="flex items-center gap-3 text-lg">
-            <div className="info-icon">
-              <Shield className="h-5 w-5" />
-            </div>
-            <span className="text-gradient">Browser Fingerprint Analysis</span>
+      <Card className="w-full shadow-lg">
+        <CardHeader className="pb-4">
+          <CardTitle className="flex items-center gap-2 text-lg">
+            <Shield className="h-5 w-5 text-primary" />
+            <span>Browser Fingerprint Analysis</span>
           </CardTitle>
         </CardHeader>
         <CardContent className="pt-0">
           <div className="space-y-4">
             {[...Array(6)].map((_, i) => (
-              <div key={i} className="fingerprint-section">
-                <div className="fingerprint-section-header">
+              <div key={i} className="border border-border rounded-lg">
+                <div className="flex items-center justify-between p-4">
                   <div className="flex items-center gap-3">
-                    <div className="loading-shimmer h-8 w-8 rounded-lg"></div>
-                    <div className="loading-shimmer h-4 rounded w-32"></div>
-                    <div className="ml-auto loading-shimmer h-6 w-16 rounded-full"></div>
+                    <div className="h-6 w-6 bg-muted rounded animate-pulse"></div>
+                    <div className="h-4 bg-muted rounded w-32 animate-pulse"></div>
+                    <div className="ml-auto h-6 bg-muted rounded-full w-16 animate-pulse"></div>
                   </div>
-                  <div className="loading-shimmer h-4 w-4 rounded"></div>
+                  <div className="h-4 w-4 bg-muted rounded animate-pulse"></div>
                 </div>
               </div>
             ))}
@@ -744,25 +742,23 @@ export default function BrowserFingerprintCard() {
   ];
 
   return (
-    <Card className="enhanced-card w-full">
-      <CardHeader className="enhanced-card-header pb-4">
-        <CardTitle className="flex items-center gap-3 text-lg">
-          <div className="info-icon">
-            <Shield className="h-5 w-5" />
-          </div>
-          <span className="text-gradient">Browser Fingerprint Analysis</span>
+    <Card className="w-full shadow-lg">
+      <CardHeader className="pb-4">
+        <CardTitle className="flex items-center gap-2 text-lg">
+          <Shield className="h-5 w-5 text-primary" />
+          <span>Browser Fingerprint Analysis</span>
         </CardTitle>
       </CardHeader>
       <CardContent className="pt-0">
         <div className="space-y-4">
           {sections.map((section, sectionIndex) => (
-            <div key={sectionIndex} className="fingerprint-section" style={{"--stagger-delay": sectionIndex} as React.CSSProperties}>
+            <div key={sectionIndex} className="border border-border rounded-lg">
               <div 
-                className="fingerprint-section-header"
+                className="flex items-center justify-between p-4 cursor-pointer hover:bg-muted/30 transition-colors"
                 onClick={() => toggleSection(sectionIndex)}
               >
-                <div className="flex items-center gap-3 text-sm font-semibold text-enhanced">
-                  <div className="info-icon text-indigo-600 dark:text-indigo-400">
+                <div className="flex items-center gap-3 text-sm font-semibold">
+                  <div className="text-indigo-600 dark:text-indigo-400 p-1 rounded">
                     {section.icon}
                   </div>
                   <span>{section.title}</span>
@@ -776,18 +772,16 @@ export default function BrowserFingerprintCard() {
               </div>
               
               {expandedSections[sectionIndex] && (
-                <div className="fingerprint-section-content">
+                <div className="p-4 pt-0">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {section.items.map((item, itemIndex) => (
-                      <div key={itemIndex} className="info-item" style={{"--stagger-delay": itemIndex} as React.CSSProperties}>
-                        <div className="flex items-center justify-between">
-                          <span className="text-xs font-medium text-secondary-enhanced">
-                            {item.label}:
-                          </span>
-                          <span className="text-sm font-semibold text-enhanced text-right max-w-[60%] truncate">
-                            {item.value}
-                          </span>
-                        </div>
+                      <div key={itemIndex} className="flex items-center justify-between p-2 rounded-lg bg-muted/20 border border-border/50">
+                        <span className="text-xs font-medium text-muted-foreground">
+                          {item.label}:
+                        </span>
+                        <span className="text-sm font-semibold text-right max-w-[60%] truncate">
+                          {item.value}
+                        </span>
                       </div>
                     ))}
                   </div>

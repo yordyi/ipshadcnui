@@ -58,31 +58,29 @@ export default function IPLocationCard() {
 
   if (loading) {
     return (
-      <Card className="enhanced-card ip-location-card w-full">
+      <Card className="w-full shadow-lg border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-background">
         <CardContent className="p-6">
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
-              <div className="loading-shimmer h-12 w-12 rounded-lg"></div>
+              <div className="h-8 w-8 bg-muted rounded animate-pulse"></div>
               <div>
-                <div className="loading-shimmer h-3 rounded w-20 mb-2"></div>
-                <div className="loading-shimmer h-6 rounded w-32"></div>
+                <div className="h-3 bg-muted rounded w-20 mb-2 animate-pulse"></div>
+                <div className="h-6 bg-muted rounded w-32 animate-pulse"></div>
               </div>
             </div>
-            <div className="loading-shimmer h-10 w-10 rounded-lg"></div>
+            <div className="h-10 w-10 bg-muted rounded-lg animate-pulse"></div>
           </div>
           
-          <div className="flex items-center gap-3 p-3 rounded-lg bg-gradient-to-r from-muted/30 to-muted/10 border border-border/20">
-            <div className="flex items-center gap-2">
-              <div className="loading-shimmer h-5 w-5 rounded"></div>
-              <div>
-                <div className="loading-shimmer h-3 rounded w-16 mb-1"></div>
-                <div className="loading-shimmer h-4 rounded w-24"></div>
-              </div>
+          <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/30 border border-border">
+            <div className="h-5 w-5 bg-muted rounded animate-pulse"></div>
+            <div>
+              <div className="h-3 bg-muted rounded w-16 mb-1 animate-pulse"></div>
+              <div className="h-4 bg-muted rounded w-24 animate-pulse"></div>
             </div>
           </div>
           
           <div className="mt-4 flex items-center justify-center">
-            <div className="loading-shimmer h-6 rounded-full w-32"></div>
+            <div className="h-6 bg-muted rounded-full w-32 animate-pulse"></div>
           </div>
         </CardContent>
       </Card>
@@ -94,45 +92,41 @@ export default function IPLocationCard() {
   }
 
   return (
-    <Card className="enhanced-card ip-location-card w-full animate-float">
+    <Card className="w-full shadow-lg border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-background">
       <CardContent className="p-6">
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
-            <div className="info-icon">
-              <span className="text-2xl animate-pulse">{getFlagEmoji(ipInfo.countryCode)}</span>
-            </div>
+            <span className="text-2xl">{getFlagEmoji(ipInfo.countryCode)}</span>
             <div>
-              <div className="text-sm text-secondary-enhanced mb-1">Your IP Address</div>
-              <div className="text-2xl font-bold text-gradient">{ipInfo.ip}</div>
+              <div className="text-sm text-muted-foreground mb-1">Your IP Address</div>
+              <div className="text-2xl font-bold text-primary">{ipInfo.ip}</div>
             </div>
           </div>
           <Button
             variant="outline"
             size="sm"
             onClick={copyToClipboard}
-            className="btn-enhanced h-10 w-10 p-0 transition-all duration-300 hover:scale-110"
+            className="h-10 w-10 p-0 hover:bg-primary/10"
           >
             {copied ? (
-              <Check className="h-4 w-4 text-green-500 animate-pulse" />
+              <Check className="h-4 w-4 text-green-500" />
             ) : (
               <Copy className="h-4 w-4" />
             )}
           </Button>
         </div>
         
-        <div className="flex items-center gap-3 p-3 rounded-lg bg-gradient-to-r from-muted/30 to-muted/10 border border-border/20">
-          <div className="flex items-center gap-2">
-            <span className="text-lg animate-pulse">{getFlagEmoji(ipInfo.countryCode)}</span>
-            <div>
-              <div className="text-sm text-secondary-enhanced">Location</div>
-              <div className="font-semibold text-enhanced">{ipInfo.city} / {ipInfo.country}</div>
-            </div>
+        <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/30 border border-border">
+          <span className="text-lg">{getFlagEmoji(ipInfo.countryCode)}</span>
+          <div>
+            <div className="text-sm text-muted-foreground">Location</div>
+            <div className="font-semibold">{ipInfo.city} / {ipInfo.country}</div>
           </div>
         </div>
         
         <div className="mt-4 flex items-center justify-center">
-          <div className="status-indicator status-online">
-            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-100 text-green-800 text-sm">
+            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
             <span>Connection Active</span>
           </div>
         </div>

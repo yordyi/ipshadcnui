@@ -262,45 +262,39 @@ export default function DeviceInfoCard() {
 
   if (loading) {
     return (
-      <Card className="enhanced-card w-full">
-        <CardHeader className="enhanced-card-header pb-4">
-          <CardTitle className="flex items-center gap-3 text-lg">
-            <div className="info-icon">
-              <Monitor className="h-5 w-5" />
-            </div>
-            <span className="text-gradient">Device Information</span>
+      <Card className="w-full shadow-lg">
+        <CardHeader className="pb-4">
+          <CardTitle className="flex items-center gap-2 text-lg">
+            <Monitor className="h-5 w-5 text-primary" />
+            <span>Device Information</span>
           </CardTitle>
         </CardHeader>
         <CardContent className="pt-0">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-3">
               <div className="mb-4">
-                <div className="loading-shimmer h-4 rounded w-1/3 mb-2"></div>
+                <div className="h-4 bg-muted rounded w-1/3 mb-2 animate-pulse"></div>
               </div>
               {[...Array(7)].map((_, i) => (
-                <div key={i} className="info-item">
-                  <div className="flex items-center gap-3">
-                    <div className="loading-shimmer h-8 w-8 rounded-lg"></div>
-                    <div className="flex-1">
-                      <div className="loading-shimmer h-3 rounded w-1/3 mb-2"></div>
-                      <div className="loading-shimmer h-4 rounded w-2/3"></div>
-                    </div>
+                <div key={i} className="flex items-center gap-3 p-3 rounded-lg bg-muted/30 border border-border">
+                  <div className="h-8 w-8 bg-muted rounded-lg animate-pulse"></div>
+                  <div className="flex-1">
+                    <div className="h-3 bg-muted rounded w-1/3 mb-2 animate-pulse"></div>
+                    <div className="h-4 bg-muted rounded w-2/3 animate-pulse"></div>
                   </div>
                 </div>
               ))}
             </div>
             <div className="space-y-3">
               <div className="mb-4">
-                <div className="loading-shimmer h-4 rounded w-1/3 mb-2"></div>
+                <div className="h-4 bg-muted rounded w-1/3 mb-2 animate-pulse"></div>
               </div>
               {[...Array(7)].map((_, i) => (
-                <div key={i} className="info-item">
-                  <div className="flex items-center gap-3">
-                    <div className="loading-shimmer h-8 w-8 rounded-lg"></div>
-                    <div className="flex-1">
-                      <div className="loading-shimmer h-3 rounded w-1/3 mb-2"></div>
-                      <div className="loading-shimmer h-4 rounded w-2/3"></div>
-                    </div>
+                <div key={i} className="flex items-center gap-3 p-3 rounded-lg bg-muted/30 border border-border">
+                  <div className="h-8 w-8 bg-muted rounded-lg animate-pulse"></div>
+                  <div className="flex-1">
+                    <div className="h-3 bg-muted rounded w-1/3 mb-2 animate-pulse"></div>
+                    <div className="h-4 bg-muted rounded w-2/3 animate-pulse"></div>
                   </div>
                 </div>
               ))}
@@ -394,13 +388,11 @@ export default function DeviceInfoCard() {
   ];
 
   return (
-    <Card className="enhanced-card w-full">
-      <CardHeader className="enhanced-card-header pb-4">
-        <CardTitle className="flex items-center gap-3 text-lg">
-          <div className="info-icon">
-            <Monitor className="h-5 w-5" />
-          </div>
-          <span className="text-gradient">Device Information</span>
+    <Card className="w-full shadow-lg">
+      <CardHeader className="pb-4">
+        <CardTitle className="flex items-center gap-2 text-lg">
+          <Monitor className="h-5 w-5 text-primary" />
+          <span>Device Information</span>
         </CardTitle>
       </CardHeader>
       <CardContent className="pt-0">
@@ -414,18 +406,16 @@ export default function DeviceInfoCard() {
               </h3>
             </div>
             {leftItems.map((item, index) => (
-              <div key={index} className="info-item" style={{"--stagger-delay": index} as React.CSSProperties}>
-                <div className="flex items-center gap-3">
-                  <div className="info-icon text-blue-600 dark:text-blue-400">
-                    {item.icon}
+              <div key={index} className="flex items-center gap-3 p-3 rounded-lg bg-muted/30 border border-border hover:bg-muted/50 transition-colors">
+                <div className="text-blue-600 dark:text-blue-400 p-2 rounded-lg bg-blue-100 dark:bg-blue-900/30">
+                  {item.icon}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="text-xs font-medium text-muted-foreground mb-1">
+                    {item.label}
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="text-xs font-medium text-secondary-enhanced mb-1">
-                      {item.label}
-                    </div>
-                    <div className="text-sm font-semibold text-enhanced truncate">
-                      {item.value}
-                    </div>
+                  <div className="text-sm font-semibold truncate">
+                    {item.value}
                   </div>
                 </div>
               </div>
@@ -441,18 +431,16 @@ export default function DeviceInfoCard() {
               </h3>
             </div>
             {rightItems.map((item, index) => (
-              <div key={index} className="info-item" style={{"--stagger-delay": index + leftItems.length} as React.CSSProperties}>
-                <div className="flex items-center gap-3">
-                  <div className="info-icon text-green-600 dark:text-green-400">
-                    {item.icon}
+              <div key={index} className="flex items-center gap-3 p-3 rounded-lg bg-muted/30 border border-border hover:bg-muted/50 transition-colors">
+                <div className="text-green-600 dark:text-green-400 p-2 rounded-lg bg-green-100 dark:bg-green-900/30">
+                  {item.icon}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="text-xs font-medium text-muted-foreground mb-1">
+                    {item.label}
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="text-xs font-medium text-secondary-enhanced mb-1">
-                      {item.label}
-                    </div>
-                    <div className="text-sm font-semibold text-enhanced truncate">
-                      {item.value}
-                    </div>
+                  <div className="text-sm font-semibold truncate">
+                    {item.value}
                   </div>
                 </div>
               </div>
