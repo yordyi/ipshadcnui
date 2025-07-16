@@ -128,7 +128,12 @@
     @apply relative overflow-hidden bg-gradient-to-br from-card to-card/95 
            border border-border/50 rounded-xl shadow-lg shadow-black/5 
            backdrop-blur-sm transition-all duration-300 hover:shadow-xl 
-           hover:shadow-black/10 hover:scale-[1.02] hover:border-primary/20;
+           hover:shadow-black/10 hover:border-primary/20;
+    transform: scale(1);
+  }
+  
+  .enhanced-card:hover {
+    transform: scale(1.02);
   }
   
   .enhanced-card::before {
@@ -169,7 +174,7 @@
     @apply relative p-4 rounded-lg bg-gradient-to-r from-muted/30 to-muted/10 
            border border-border/30 transition-all duration-200 
            hover:shadow-md hover:border-primary/30 hover:bg-gradient-to-r 
-           hover:from-primary/5 hover:to-primary/10 group;
+           hover:from-primary/5 hover:to-primary/10;
   }
   
   .info-item::before {
@@ -182,11 +187,22 @@
     @apply scale-y-100;
   }
   
+  .info-item:hover .info-icon {
+    @apply scale-110 shadow-lg shadow-primary/20;
+  }
+  
+  .info-item:hover .text-enhanced {
+    @apply text-foreground;
+  }
+  
+  .info-item:hover .text-secondary-enhanced {
+    @apply text-muted-foreground;
+  }
+  
   /* Enhanced Icons */
   .info-icon {
     @apply p-2 rounded-lg bg-gradient-to-br from-primary/20 to-primary/10 
-           text-primary transition-all duration-200 group-hover:scale-110 
-           group-hover:shadow-lg group-hover:shadow-primary/20;
+           text-primary transition-all duration-200;
   }
   
   /* Typography Enhancements */
@@ -195,13 +211,11 @@
   }
   
   .text-enhanced {
-    @apply font-medium text-foreground/90 transition-colors duration-200 
-           group-hover:text-foreground;
+    @apply font-medium text-foreground/90 transition-colors duration-200;
   }
   
   .text-secondary-enhanced {
-    @apply text-muted-foreground/80 transition-colors duration-200 
-           group-hover:text-muted-foreground;
+    @apply text-muted-foreground/80 transition-colors duration-200;
   }
   
   /* Enhanced Buttons */
@@ -215,17 +229,18 @@
   .btn-enhanced::before {
     content: '';
     @apply absolute inset-0 bg-gradient-to-r from-white/20 to-transparent 
-           translate-x-[-100%] transition-transform duration-300;
+           transition-transform duration-300;
+    transform: translateX(-100%);
   }
   
   .btn-enhanced:hover::before {
-    @apply translate-x-[100%];
+    transform: translateX(100%);
   }
   
   /* Loading Animations */
   .loading-skeleton {
-    @apply bg-gradient-to-r from-muted/50 via-muted/80 to-muted/50 
-           bg-[length:200%_100%] animate-pulse;
+    @apply bg-gradient-to-r from-muted/50 via-muted/80 to-muted/50 animate-pulse;
+    background-size: 200% 100%;
   }
   
   .loading-shimmer {
@@ -234,8 +249,9 @@
   
   .loading-shimmer::before {
     content: '';
-    @apply absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent 
-           translate-x-[-100%] animate-[shimmer_2s_infinite];
+    @apply absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent;
+    transform: translateX(-100%);
+    animation: shimmer 2s infinite;
   }
   
   /* Enhanced Fingerprint Card */
@@ -260,7 +276,19 @@
     @apply flex items-center justify-between p-3 rounded-lg 
            bg-gradient-to-r from-muted/20 to-muted/10 border border-border/20 
            transition-all duration-200 hover:shadow-md hover:border-primary/30 
-           hover:bg-gradient-to-r hover:from-primary/5 hover:to-primary/10 group;
+           hover:bg-gradient-to-r hover:from-primary/5 hover:to-primary/10;
+  }
+  
+  .summary-item:hover .info-icon {
+    @apply scale-110 shadow-lg shadow-primary/20;
+  }
+  
+  .summary-item:hover .text-enhanced {
+    @apply text-foreground;
+  }
+  
+  .summary-item:hover .text-secondary-enhanced {
+    @apply text-muted-foreground;
   }
   
   /* IP Location Card Enhancement */
