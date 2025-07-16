@@ -6,6 +6,7 @@ export default function AppIcon({ size = 512 }: { size?: number }) {
       viewBox="0 0 512 512"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      data-testid="app-icon"
     >
       <rect width="512" height="512" rx="100" fill="#6366f1"/>
       <path

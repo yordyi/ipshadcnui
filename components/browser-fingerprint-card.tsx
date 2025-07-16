@@ -740,7 +740,7 @@ export default function BrowserFingerprintCard() {
   ];
 
   return (
-    <Card className="w-full shadow-lg">
+    <Card className="w-full shadow-lg" data-testid="browser-fingerprint-card">
       <CardHeader className="pb-4">
         <CardTitle className="flex items-center gap-2 text-lg">
           <Shield className="h-5 w-5 text-primary" />

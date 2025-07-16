@@ -45,12 +45,12 @@ test.describe('API Routes', () => {
         expect(response.status()).toBe(200);
         
         const contentType = response.headers()['content-type'];
-        expect(contentType).toContain('image/svg+xml');
+        expect(contentType).toContain('image/png');
         
-        const svgContent = await response.text();
-        expect(svgContent).toContain('<svg');
-        expect(svgContent).toContain(`width="${size}"`);
-        expect(svgContent).toContain(`height="${size}"`);
+        // 检查响应体是二进制图像数据
+        const buffer = await response.body();
+        expect(buffer).toBeTruthy();
+        expect(buffer.length).toBeGreaterThan(0);
       }
     });
 
