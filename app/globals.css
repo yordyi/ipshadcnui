@@ -387,47 +387,64 @@
 /* 自定义滚动条样式 */
 .custom-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: #cbd5e1 transparent;
+  scrollbar-color: #3b82f6 transparent;
   -webkit-overflow-scrolling: touch; /* iOS平滑滚动 */
+  padding-bottom: 8px;
+  margin-bottom: -8px;
 }
 
 .custom-scrollbar::-webkit-scrollbar {
-  height: 6px;
+  height: 8px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
+  background: rgba(0,0,0,0.1);
+  border-radius: 4px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: #cbd5e1;
-  border-radius: 3px;
+  background-color: #3b82f6;
+  border-radius: 4px;
+  border: 1px solid rgba(255,255,255,0.2);
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background-color: #94a3b8;
+  background-color: #2563eb;
 }
 
 /* 在移动设备上添加视觉提示 */
 @media (max-width: 768px) {
   .custom-scrollbar {
     position: relative;
-    padding-bottom: 4px;
+    padding-bottom: 12px;
+    margin-bottom: -12px;
   }
   
   /* 添加渐变效果表示可滚动 */
-  .custom-scrollbar::after {
+  .custom-scrollbar::before {
     content: '';
     position: absolute;
     right: 0;
     top: 0;
-    bottom: 0;
-    width: 20px;
-    background: linear-gradient(to right, transparent, rgba(255,255,255,0.8));
+    bottom: 8px;
+    width: 30px;
+    background: linear-gradient(to right, transparent, rgba(255,255,255,0.9));
     pointer-events: none;
+    z-index: 1;
   }
   
-  .dark .custom-scrollbar::after {
-    background: linear-gradient(to right, transparent, rgba(0,0,0,0.8));
+  .dark .custom-scrollbar::before {
+    background: linear-gradient(to right, transparent, rgba(0,0,0,0.9));
+  }
+  
+  /* 添加提示文本 */
+  .custom-scrollbar::after {
+    content: '← 滑动查看';
+    position: absolute;
+    right: 5px;
+    bottom: -20px;
+    font-size: 10px;
+    color: #6b7280;
+    pointer-events: none;
   }
 }

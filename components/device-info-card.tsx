@@ -95,16 +95,25 @@ export default function DeviceInfoCard() {
         const userAgent = nav.userAgent;
         const platform = nav.platform;
         
-        // iOS检测 - 必须放在Mac检测之前，因为iOS设备的UA可能包含Mac
-        if (/iPhone|iPad|iPod/.test(userAgent) || 
-            /iOS/.test(userAgent) ||
-            (platform === 'MacIntel' && nav.maxTouchPoints > 1)) {
-          return "iOS";
-        }
+        // 调试信息 - 在开发环境中显示
+        console.log('Platform detection:', {
+          userAgent,
+          platform,
+          maxTouchPoints: nav.maxTouchPoints,
+          isMobile: /Mobi|Android/i.test(userAgent),
+          isIOS: /iPhone|iPad|iPod/.test(userAgent),
+          hasTouch: nav.maxTouchPoints > 0
+        });
+        
+        // 更准确的iOS检测
+        if (/iPhone/.test(userAgent)) return "iOS";
+        if (/iPad/.test(userAgent)) return "iOS";
+        if (/iPod/.test(userAgent)) return "iOS";
+        if (platform === 'iPhone' || platform === 'iPad' || platform === 'iPod') return "iOS";
         if (/Android/.test(userAgent)) return "Android";
         if (/Windows/.test(userAgent)) return "Windows";
-        if (/Mac/.test(userAgent)) return "macOS";
         if (/Linux/.test(userAgent)) return "Linux";
+        if (/Mac/.test(userAgent)) return "macOS";
         return "Unknown";
       };
 
@@ -464,8 +473,8 @@ export default function DeviceInfoCard() {
                   <div className="text-xs font-medium text-muted-foreground mb-1">
                     {item.label}
                   </div>
-                  <div className="text-sm font-semibold overflow-x-auto whitespace-nowrap custom-scrollbar">
-                    {item.value}
+                  <div className="text-sm font-semibold overflow-x-auto whitespace-nowrap custom-scrollbar w-full">
+                    <span className="inline-block">{item.value}</span>
                   </div>
                 </div>
               </div>
@@ -489,8 +498,8 @@ export default function DeviceInfoCard() {
                   <div className="text-xs font-medium text-muted-foreground mb-1">
                     {item.label}
                   </div>
-                  <div className="text-sm font-semibold overflow-x-auto whitespace-nowrap custom-scrollbar">
-                    {item.value}
+                  <div className="text-sm font-semibold overflow-x-auto whitespace-nowrap custom-scrollbar w-full">
+                    <span className="inline-block">{item.value}</span>
                   </div>
                 </div>
               </div>
