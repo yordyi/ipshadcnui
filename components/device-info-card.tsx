@@ -93,11 +93,18 @@ export default function DeviceInfoCard() {
       // 检测操作系统
       const getPlatform = () => {
         const userAgent = nav.userAgent;
-        if (userAgent.includes("Windows")) return "Windows";
-        if (userAgent.includes("Mac")) return "macOS";
-        if (userAgent.includes("Linux")) return "Linux";
-        if (userAgent.includes("Android")) return "Android";
-        if (userAgent.includes("iOS")) return "iOS";
+        const platform = nav.platform;
+        
+        // iOS检测 - 必须放在Mac检测之前，因为iOS设备的UA可能包含Mac
+        if (/iPhone|iPad|iPod/.test(userAgent) || 
+            /iOS/.test(userAgent) ||
+            (platform === 'MacIntel' && nav.maxTouchPoints > 1)) {
+          return "iOS";
+        }
+        if (/Android/.test(userAgent)) return "Android";
+        if (/Windows/.test(userAgent)) return "Windows";
+        if (/Mac/.test(userAgent)) return "macOS";
+        if (/Linux/.test(userAgent)) return "Linux";
         return "Unknown";
       };
 
@@ -111,7 +118,18 @@ export default function DeviceInfoCard() {
             const debugInfo = webglContext.getExtension('WEBGL_debug_renderer_info');
             if (debugInfo) {
               const renderer = webglContext.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
-              return renderer || "Unknown";
+              if (renderer) return renderer;
+            }
+            
+            // 如果无法获取详细信息，根据平台返回通用信息
+            const userAgent = nav.userAgent;
+            if (/iPhone|iPad|iPod/.test(userAgent) || /iOS/.test(userAgent)) {
+              return "Apple GPU";
+            } else if (/Android/.test(userAgent)) {
+              return "Mobile GPU";
+            } else {
+              const vendor = webglContext.getParameter(webglContext.VENDOR);
+              return vendor || "Unknown";
             }
           }
         } catch (e) {
@@ -446,10 +464,8 @@ export default function DeviceInfoCard() {
                   <div className="text-xs font-medium text-muted-foreground mb-1">
                     {item.label}
                   </div>
-                  <div className="text-sm font-semibold overflow-x-auto whitespace-nowrap scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent w-full">
-                    <span className="inline-block">
-                      {item.value}
-                    </span>
+                  <div className="text-sm font-semibold overflow-x-auto whitespace-nowrap custom-scrollbar">
+                    {item.value}
                   </div>
                 </div>
               </div>
@@ -473,7 +489,7 @@ export default function DeviceInfoCard() {
                   <div className="text-xs font-medium text-muted-foreground mb-1">
                     {item.label}
                   </div>
-                  <div className="text-sm font-semibold truncate">
+                  <div className="text-sm font-semibold overflow-x-auto whitespace-nowrap custom-scrollbar">
                     {item.value}
                   </div>
                 </div>
