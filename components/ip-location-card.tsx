@@ -21,39 +21,36 @@ export default function IPLocationCard() {
     const fetchIPInfo = async () => {
       try {
         console.log('Fetching IP info...');
-        const response = await fetch('https://ipapi.co/json/');
+        
+        // Use our API route to avoid CORS issues
+        const response = await fetch('/api/ip');
         
         if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+          throw new Error(`API returned ${response.status}`);
         }
         
         const data = await response.json();
         console.log('IP API response:', data);
         
-        if (data.ip) {
+        // Set the IP info with whatever data we have
+        if (data && data.ip) {
           setIPInfo({
             ip: data.ip,
             country: data.country_name || 'Unknown',
-            countryCode: data.country_code?.toLowerCase() || 'us',
+            countryCode: data.country_code?.toLowerCase() || 'xx',
             city: data.city || 'Unknown'
           });
         } else {
-          // Fallback data for development
-          setIPInfo({
-            ip: '127.0.0.1',
-            country: 'Local Development',
-            countryCode: 'us',
-            city: 'Localhost'
-          });
+          throw new Error('Unable to detect IP');
         }
       } catch (error) {
         console.error('Failed to fetch IP info:', error);
         // Fallback data when API fails
         setIPInfo({
-          ip: '127.0.0.1',
-          country: 'Local Development',
-          countryCode: 'us',
-          city: 'Localhost'
+          ip: 'Unable to detect',
+          country: 'Connection Error',
+          countryCode: 'xx',
+          city: 'Unknown'
         });
       } finally {
         setLoading(false);
@@ -64,7 +61,7 @@ export default function IPLocationCard() {
   }, []);
 
   const copyToClipboard = async () => {
-    if (ipInfo) {
+    if (ipInfo && ipInfo.ip !== 'Unable to detect') {
       try {
         await navigator.clipboard.writeText(ipInfo.ip);
         setCopied(true);
@@ -76,9 +73,16 @@ export default function IPLocationCard() {
   };
 
   const getFlagEmoji = (countryCode: string) => {
-    return countryCode
-      .toUpperCase()
-      .replace(/./g, char => String.fromCodePoint(char.charCodeAt(0) + 127397));
+    if (countryCode === 'xx' || !countryCode || countryCode.length !== 2) {
+      return '🌐'; // Globe emoji for unknown locations
+    }
+    try {
+      return countryCode
+        .toUpperCase()
+        .replace(/./g, char => String.fromCodePoint(char.charCodeAt(0) + 127397));
+    } catch {
+      return '🌐';
+    }
   };
 
   if (loading) {
@@ -127,25 +131,35 @@ export default function IPLocationCard() {
               <div className="text-2xl font-bold text-primary">{ipInfo.ip}</div>
             </div>
           </div>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={copyToClipboard}
-            className="h-10 w-10 p-0 hover:bg-primary/10"
-          >
-            {copied ? (
-              <Check className="h-4 w-4 text-green-500" />
-            ) : (
-              <Copy className="h-4 w-4" />
-            )}
-          </Button>
+          {ipInfo.ip !== 'Unable to detect' && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={copyToClipboard}
+              className="h-10 w-10 p-0 hover:bg-primary/10"
+            >
+              {copied ? (
+                <Check className="h-4 w-4 text-green-500" />
+              ) : (
+                <Copy className="h-4 w-4" />
+              )}
+            </Button>
+          )}
         </div>
         
         <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/30 border border-border">
           <span className="text-lg">{getFlagEmoji(ipInfo.countryCode)}</span>
           <div>
             <div className="text-sm text-muted-foreground">Location</div>
-            <div className="font-semibold">{ipInfo.city} / {ipInfo.country}</div>
+            <div className="font-semibold">
+              {ipInfo.city !== 'Unknown' && ipInfo.country !== 'Unknown' 
+                ? `${ipInfo.city} / ${ipInfo.country}`
+                : ipInfo.country !== 'Unknown' 
+                  ? ipInfo.country 
+                  : ipInfo.city !== 'Unknown' 
+                    ? ipInfo.city 
+                    : 'Unknown Location'}
+            </div>
           </div>
         </div>
         

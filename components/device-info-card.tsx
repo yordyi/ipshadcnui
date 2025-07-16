@@ -163,7 +163,7 @@ export default function DeviceInfoCard() {
       let ipData = null;
       try {
         console.log('Device Info: Fetching IP data...');
-        const ipResponse = await fetch('https://ipapi.co/json/');
+        const ipResponse = await fetch('/api/ip');
         
         if (!ipResponse.ok) {
           throw new Error(`HTTP error! status: ${ipResponse.status}`);
@@ -172,33 +172,23 @@ export default function DeviceInfoCard() {
         ipData = await ipResponse.json();
         console.log('Device Info IP API response:', ipData);
         
-        // If no IP data, use fallback
-        if (!ipData || !ipData.ip) {
-          ipData = {
-            ip: '127.0.0.1',
-            country_name: 'Local Development',
-            country_code: 'US',
-            city: 'Localhost',
-            org: 'Local Network',
-            latitude: 0,
-            longitude: 0,
-            timezone: 'UTC',
-            postal: '00000'
-          };
+        // Check if we have valid data
+        if (!ipData || !ipData.ip || ipData.error) {
+          throw new Error(ipData?.error || 'No data received');
         }
       } catch (error) {
         console.error('Failed to fetch IP data:', error);
         // Fallback IP data
         ipData = {
-          ip: '127.0.0.1',
-          country_name: 'Local Development',
-          country_code: 'US',
-          city: 'Localhost',
-          org: 'Local Network',
+          ip: 'Unable to detect',
+          country_name: 'Unknown',
+          country_code: 'XX',
+          city: 'Unknown',
+          org: 'Unknown',
           latitude: 0,
           longitude: 0,
-          timezone: 'UTC',
-          postal: '00000'
+          timezone: 'Unknown',
+          postal: 'Unknown'
         };
       }
 
@@ -259,12 +249,20 @@ export default function DeviceInfoCard() {
         
         // 右侧信息
         webrtc: getWebRTCSupport(),
-        isp: ipData?.org || "Unknown",
+        isp: ipData?.org || ipData?.isp || "Unknown",
         dns: dnsInfo,
-        location: ipData ? `${countryFlag} ${ipData.city}, ${ipData.country_name}` : "Unknown",
-        coordinates: ipData ? `${ipData.latitude}, ${ipData.longitude}` : "Unknown",
-        timezoneConnection: ipData?.timezone ? `${countryFlag} ${ipData.timezone}` : "Unknown",
-        postal: ipData?.postal ? `${countryFlag} ${ipData.postal}` : "Unknown",
+        location: (ipData && ipData.city !== 'Unknown' && ipData.country_name !== 'Unknown') 
+          ? `${countryFlag} ${ipData.city}, ${ipData.country_name}` 
+          : "Unknown",
+        coordinates: (ipData && ipData.latitude && ipData.longitude && ipData.latitude !== 0) 
+          ? `${Number(ipData.latitude).toFixed(4)}, ${Number(ipData.longitude).toFixed(4)}` 
+          : "0, 0",
+        timezoneConnection: ipData?.timezone && ipData.timezone !== 'Unknown' 
+          ? `${countryFlag} ${ipData.timezone}` 
+          : `${countryFlag} UTC`,
+        postal: ipData?.postal && ipData.postal !== 'Unknown' 
+          ? `${countryFlag} ${ipData.postal}` 
+          : `${countryFlag} 00000`,
         
         // 其他信息
         deviceType: getDeviceType()
