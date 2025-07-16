@@ -1,5 +1,58 @@
 import { NextResponse } from 'next/server';
 
+interface IpWhoIsResponse {
+  ip: string;
+  country: string;
+  country_code: string;
+  city: string;
+  region: string;
+  connection?: {
+    org?: string;
+    asn?: string;
+    domain?: string;
+  };
+  timezone?: {
+    id?: string;
+  };
+  latitude: number;
+  longitude: number;
+}
+
+interface BigDataCloudResponse {
+  ip: string;
+  country?: {
+    name?: string;
+    isoAlpha2?: string;
+  };
+  city?: {
+    name?: string;
+  };
+  locality?: string;
+  principalSubdivision?: string;
+  network?: {
+    organisation?: string;
+    carriers?: Array<{ asn?: string }>;
+  };
+  location?: {
+    latitude?: number;
+    longitude?: number;
+    timeZone?: {
+      localTime?: string;
+    };
+  };
+}
+
+interface FreeIpApiResponse {
+  ipAddress: string;
+  countryName: string;
+  countryCode: string;
+  cityName: string;
+  regionName: string;
+  timeZone: string;
+  latitude: number;
+  longitude: number;
+}
+
 export async function GET(request: Request) {
   try {
     // Get the client's IP from the request headers
@@ -13,19 +66,19 @@ export async function GET(request: Request) {
     const ipApis = [
       {
         url: 'https://api.ipify.org?format=json',
-        parseIp: (data: any) => data.ip
+        parseIp: (data: { ip: string }) => data.ip
       },
       {
         url: 'https://api.my-ip.io/ip.json',
-        parseIp: (data: any) => data.ip
+        parseIp: (data: { ip: string }) => data.ip
       },
       {
         url: 'https://ip.seeip.org/json',
-        parseIp: (data: any) => data.ip
+        parseIp: (data: { ip: string }) => data.ip
       },
       {
         url: 'https://api.bigdatacloud.net/data/client-ip',
-        parseIp: (data: any) => data.ipString
+        parseIp: (data: { ipString: string }) => data.ipString
       }
     ];
 
@@ -61,7 +114,7 @@ export async function GET(request: Request) {
     const locationApis = [
       {
         url: `https://ipwho.is/${detectedIp}`,
-        parseData: (data: any) => ({
+        parseData: (data: IpWhoIsResponse) => ({
           ip: data.ip,
           country_name: data.country,
           country_code: data.country_code,
@@ -77,7 +130,7 @@ export async function GET(request: Request) {
       },
       {
         url: `https://api.bigdatacloud.net/data/ip-geolocation?ip=${detectedIp}&localityLanguage=en&key=free`,
-        parseData: (data: any) => ({
+        parseData: (data: BigDataCloudResponse) => ({
           ip: data.ip,
           country_name: data.country?.name || 'Unknown',
           country_code: data.country?.isoAlpha2 || 'XX',
@@ -93,7 +146,7 @@ export async function GET(request: Request) {
       },
       {
         url: `https://freeipapi.com/api/json/${detectedIp}`,
-        parseData: (data: any) => ({
+        parseData: (data: FreeIpApiResponse) => ({
           ip: data.ipAddress,
           country_name: data.countryName,
           country_code: data.countryCode,

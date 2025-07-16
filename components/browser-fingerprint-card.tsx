@@ -4,15 +4,13 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { 
   Monitor, 
-  Palette, 
   Volume2, 
   Database,
   Type,
   Calculator,
   Puzzle,
   Shield,
-  ChevronDown,
-  ChevronUp
+  ChevronDown
 } from "lucide-react";
 
 interface BrowserFingerprint {
@@ -269,7 +267,8 @@ export default function BrowserFingerprintCard() {
         const getAudioFingerprint = () => {
           try {
             // 使用OfflineAudioContext避免权限问题
-            const offlineContext = new (window.OfflineAudioContext || (window as any).webkitOfflineAudioContext)(1, 44100, 44100);
+            const OfflineAudioCtx = window.OfflineAudioContext || (window as unknown as { webkitOfflineAudioContext: typeof OfflineAudioContext }).webkitOfflineAudioContext;
+            const offlineContext = new OfflineAudioCtx(1, 44100, 44100);
             
             // 创建音频节点
             const oscillator = offlineContext.createOscillator();
@@ -308,8 +307,6 @@ export default function BrowserFingerprintCard() {
             
             // 设置分析器
             analyser.fftSize = 2048;
-            const bufferLength = analyser.frequencyBinCount;
-            const dataArray = new Uint8Array(bufferLength);
             
             oscillator.start();
             
@@ -327,7 +324,7 @@ export default function BrowserFingerprintCard() {
               const contextProperties = [
                 offlineContext.sampleRate,
                 offlineContext.length,
-                offlineContext.numberOfChannels
+                1 // numberOfChannels is always 1 for our context
               ].join(',');
               
               hash = ((hash << 5) - hash + contextProperties.length) & 0xffffffff;
@@ -335,7 +332,8 @@ export default function BrowserFingerprintCard() {
               return Math.abs(hash).toString(16).slice(0, 8);
             }).catch(() => {
               // 如果OfflineAudioContext失败，使用基础方法
-              const basicContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+              const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+              const basicContext = new AudioCtx();
               const baseInfo = basicContext.sampleRate.toString() + basicContext.state;
               let hash = 0;
               for (let i = 0; i < baseInfo.length; i++) {
@@ -354,7 +352,7 @@ export default function BrowserFingerprintCard() {
           const sessionStorage = typeof window.sessionStorage !== 'undefined' ? 'supported' : 'not supported';
           const localStorage = typeof window.localStorage !== 'undefined' ? 'supported' : 'not supported';
           const indexedDB = typeof window.indexedDB !== 'undefined' ? 'supported' : 'not supported';
-          const openDatabase = typeof (window as any).openDatabase !== 'undefined' ? 'supported' : 'not supported';
+          const openDatabase = typeof (window as unknown as { openDatabase?: unknown }).openDatabase !== 'undefined' ? 'supported' : 'not supported';
           const cookiesEnabled = navigator.cookieEnabled ? 'enabled' : 'disabled';
           
           return {
@@ -523,8 +521,8 @@ export default function BrowserFingerprintCard() {
           
           const pdfViewerEnabled = (() => {
             try {
-              return navigator.mimeTypes && navigator.mimeTypes['application/pdf'] ? 'yes' : 'no';
-            } catch (e) {
+              return navigator.mimeTypes && navigator.mimeTypes.namedItem('application/pdf') ? 'yes' : 'no';
+            } catch {
               return 'unknown';
             }
           })();
@@ -570,8 +568,8 @@ export default function BrowserFingerprintCard() {
             });
             
             // 额外检测：检查是否有AdBlock Plus或uBlock Origin的特征
-            const hasAdBlockPlus = typeof (window as any).adblockplus !== 'undefined';
-            const hasUBlockOrigin = typeof (window as any).uBO_noopFn !== 'undefined';
+            const hasAdBlockPlus = typeof (window as unknown as { adblockplus?: unknown }).adblockplus !== 'undefined';
+            const hasUBlockOrigin = typeof (window as unknown as { uBO_noopFn?: unknown }).uBO_noopFn !== 'undefined';
             
             if (hasAdBlockPlus) testResults.push('ABP');
             if (hasUBlockOrigin) testResults.push('uBO');
@@ -596,7 +594,7 @@ export default function BrowserFingerprintCard() {
         
         // 特殊功能检测
         const getSpecialFeatures = () => {
-          const applePay = (window as any).ApplePaySession ? 'supported' : 'not supported';
+          const applePay = (window as unknown as { ApplePaySession?: unknown }).ApplePaySession ? 'supported' : 'not supported';
           const privateClickMeasurement = 'HTMLAnchorElement' in window && 'attributionSourceId' in HTMLAnchorElement.prototype ? 'supported' : 'not supported';
           
           return {
