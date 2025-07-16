@@ -4,9 +4,14 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Download, X } from "lucide-react";
 
+interface BeforeInstallPromptEvent extends Event {
+  prompt(): Promise<void>;
+  userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
+}
+
 export default function PWARegister() {
   const [showInstallPrompt, setShowInstallPrompt] = useState(false);
-  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [deferredPrompt, setDeferredPrompt] = useState<Event | null>(null);
 
   useEffect(() => {
     // Register service worker
@@ -38,8 +43,10 @@ export default function PWARegister() {
   const handleInstallClick = async () => {
     if (!deferredPrompt) return;
 
-    deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
+    // Cast to BeforeInstallPromptEvent which has the required methods
+    const promptEvent = deferredPrompt as BeforeInstallPromptEvent;
+    promptEvent.prompt();
+    const { outcome } = await promptEvent.userChoice;
     
     if (outcome === 'accepted') {
       console.log('User accepted the install prompt');
