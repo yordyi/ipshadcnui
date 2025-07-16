@@ -20,16 +20,41 @@ export default function IPLocationCard() {
   useEffect(() => {
     const fetchIPInfo = async () => {
       try {
+        console.log('Fetching IP info...');
         const response = await fetch('https://ipapi.co/json/');
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
         const data = await response.json();
-        setIPInfo({
-          ip: data.ip,
-          country: data.country_name,
-          countryCode: data.country_code.toLowerCase(),
-          city: data.city
-        });
+        console.log('IP API response:', data);
+        
+        if (data.ip) {
+          setIPInfo({
+            ip: data.ip,
+            country: data.country_name || 'Unknown',
+            countryCode: data.country_code?.toLowerCase() || 'us',
+            city: data.city || 'Unknown'
+          });
+        } else {
+          // Fallback data for development
+          setIPInfo({
+            ip: '127.0.0.1',
+            country: 'Local Development',
+            countryCode: 'us',
+            city: 'Localhost'
+          });
+        }
       } catch (error) {
         console.error('Failed to fetch IP info:', error);
+        // Fallback data when API fails
+        setIPInfo({
+          ip: '127.0.0.1',
+          country: 'Local Development',
+          countryCode: 'us',
+          city: 'Localhost'
+        });
       } finally {
         setLoading(false);
       }

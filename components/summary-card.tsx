@@ -45,9 +45,39 @@ export default function SummaryCard() {
   useEffect(() => {
     const getSummaryInfo = async () => {
       try {
+        console.log('Fetching summary info...');
         // 获取基本IP信息
         const ipResponse = await fetch('https://ipapi.co/json/');
+        
+        if (!ipResponse.ok) {
+          throw new Error(`HTTP error! status: ${ipResponse.status}`);
+        }
+        
         const ipData = await ipResponse.json();
+        console.log('Summary IP API response:', ipData);
+        
+        // If no IP data, use fallback
+        if (!ipData.ip) {
+          const fallbackInfo: SummaryInfo = {
+            asn: "AS0000",
+            hostname: "localhost",
+            range: "127.0.0.1/8",
+            company: "Local Development",
+            hostedDomains: "< 1K",
+            privacy: "Private",
+            anycast: "No",
+            asnType: "Development",
+            abuseContact: "developer@localhost",
+            networkType: "IPv4",
+            geolocationAccuracy: "High (Local)",
+            connectionMethod: "Local",
+            routingType: "Local",
+            securityLevel: "High (Local)",
+            vpnDetection: "Not Detected"
+          };
+          setSummaryInfo(fallbackInfo);
+          return;
+        }
         
         // 获取更详细的ASN信息 - 使用多个API源
         let asnDetails = null;
@@ -362,6 +392,25 @@ export default function SummaryCard() {
         setSummaryInfo(info);
       } catch (error) {
         console.error('Failed to fetch summary info:', error);
+        // Fallback data when all APIs fail
+        const fallbackInfo: SummaryInfo = {
+          asn: "AS0000",
+          hostname: "localhost",
+          range: "127.0.0.1/8",
+          company: "Local Development",
+          hostedDomains: "< 1K",
+          privacy: "Private",
+          anycast: "No",
+          asnType: "Development",
+          abuseContact: "developer@localhost",
+          networkType: "IPv4",
+          geolocationAccuracy: "High (Local)",
+          connectionMethod: "Local",
+          routingType: "Local",
+          securityLevel: "High (Local)",
+          vpnDetection: "Not Detected"
+        };
+        setSummaryInfo(fallbackInfo);
       } finally {
         setLoading(false);
       }

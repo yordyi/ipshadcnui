@@ -162,10 +162,44 @@ export default function DeviceInfoCard() {
       // 获取IP信息
       let ipData = null;
       try {
+        console.log('Device Info: Fetching IP data...');
         const ipResponse = await fetch('https://ipapi.co/json/');
+        
+        if (!ipResponse.ok) {
+          throw new Error(`HTTP error! status: ${ipResponse.status}`);
+        }
+        
         ipData = await ipResponse.json();
+        console.log('Device Info IP API response:', ipData);
+        
+        // If no IP data, use fallback
+        if (!ipData || !ipData.ip) {
+          ipData = {
+            ip: '127.0.0.1',
+            country_name: 'Local Development',
+            country_code: 'US',
+            city: 'Localhost',
+            org: 'Local Network',
+            latitude: 0,
+            longitude: 0,
+            timezone: 'UTC',
+            postal: '00000'
+          };
+        }
       } catch (error) {
         console.error('Failed to fetch IP data:', error);
+        // Fallback IP data
+        ipData = {
+          ip: '127.0.0.1',
+          country_name: 'Local Development',
+          country_code: 'US',
+          city: 'Localhost',
+          org: 'Local Network',
+          latitude: 0,
+          longitude: 0,
+          timezone: 'UTC',
+          postal: '00000'
+        };
       }
 
       // 获取DNS信息
