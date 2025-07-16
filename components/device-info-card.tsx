@@ -446,8 +446,10 @@ export default function DeviceInfoCard() {
                   <div className="text-xs font-medium text-muted-foreground mb-1">
                     {item.label}
                   </div>
-                  <div className="text-sm font-semibold overflow-x-auto whitespace-nowrap scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
-                    {item.value}
+                  <div className="text-sm font-semibold overflow-x-auto whitespace-nowrap scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent w-full">
+                    <span className="inline-block">
+                      {item.value}
+                    </span>
                   </div>
                 </div>
               </div>
