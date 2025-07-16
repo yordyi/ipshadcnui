@@ -11,7 +11,9 @@ import {
   Languages,
   MapPin,
   Camera,
-  Navigation
+  Navigation,
+  Mail,
+  Code
 } from "lucide-react";
 
 interface DeviceInfo {
@@ -23,6 +25,7 @@ interface DeviceInfo {
   language: string;
   screenResolution: string;
   timezone: string;
+  userAgent: string;
   
   // 右侧信息
   webrtc: string;
@@ -31,10 +34,10 @@ interface DeviceInfo {
   location: string;
   coordinates: string;
   timezoneConnection: string;
+  postal: string;
   
   // 其他信息
   deviceType: string;
-  userAgent: string;
 }
 
 export default function DeviceInfoCard() {
@@ -216,8 +219,9 @@ export default function DeviceInfoCard() {
         browserVersion: version,
         videocard: getVideocard(),
         language: nav.language || "Unknown",
-        screenResolution: `${screen.width}x${screen.height}`,
+        screenResolution: `${screen.width}x${screen.height}${window.devicePixelRatio > 1 ? ` (${Math.round(screen.width * window.devicePixelRatio)}x${Math.round(screen.height * window.devicePixelRatio)} 物理分辨率)` : ''}`,
         timezone: `${timezoneFlag} ${userTimezone}`,
+        userAgent: nav.userAgent,
         
         // 右侧信息
         webrtc: getWebRTCSupport(),
@@ -226,10 +230,10 @@ export default function DeviceInfoCard() {
         location: ipData ? `${countryFlag} ${ipData.city}, ${ipData.country_name}` : "Unknown",
         coordinates: ipData ? `${ipData.latitude}, ${ipData.longitude}` : "Unknown",
         timezoneConnection: ipData?.timezone ? `${countryFlag} ${ipData.timezone}` : "Unknown",
+        postal: ipData?.postal ? `${countryFlag} ${ipData.postal}` : "Unknown",
         
         // 其他信息
-        deviceType: getDeviceType(),
-        userAgent: nav.userAgent
+        deviceType: getDeviceType()
       };
 
       setDeviceInfo(info);
@@ -258,32 +262,48 @@ export default function DeviceInfoCard() {
 
   if (loading) {
     return (
-      <Card className="w-full">
-        <CardHeader className="pb-2">
-          <CardTitle className="flex items-center gap-2 text-base">
-            <Monitor className="h-4 w-4" />
-            Device Information
+      <Card className="enhanced-card w-full">
+        <CardHeader className="enhanced-card-header pb-4">
+          <CardTitle className="flex items-center gap-3 text-lg">
+            <div className="info-icon">
+              <Monitor className="h-5 w-5" />
+            </div>
+            <span className="text-gradient">Device Information</span>
           </CardTitle>
         </CardHeader>
         <CardContent className="pt-0">
-          <div className="animate-pulse">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                {[...Array(6)].map((_, i) => (
-                  <div key={i} className="flex justify-between">
-                    <div className="h-3 bg-gray-200 rounded w-1/3"></div>
-                    <div className="h-3 bg-gray-200 rounded w-1/2"></div>
-                  </div>
-                ))}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-3">
+              <div className="mb-4">
+                <div className="loading-shimmer h-4 rounded w-1/3 mb-2"></div>
               </div>
-              <div className="space-y-2">
-                {[...Array(6)].map((_, i) => (
-                  <div key={i} className="flex justify-between">
-                    <div className="h-3 bg-gray-200 rounded w-1/3"></div>
-                    <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+              {[...Array(7)].map((_, i) => (
+                <div key={i} className="info-item">
+                  <div className="flex items-center gap-3">
+                    <div className="loading-shimmer h-8 w-8 rounded-lg"></div>
+                    <div className="flex-1">
+                      <div className="loading-shimmer h-3 rounded w-1/3 mb-2"></div>
+                      <div className="loading-shimmer h-4 rounded w-2/3"></div>
+                    </div>
                   </div>
-                ))}
+                </div>
+              ))}
+            </div>
+            <div className="space-y-3">
+              <div className="mb-4">
+                <div className="loading-shimmer h-4 rounded w-1/3 mb-2"></div>
               </div>
+              {[...Array(7)].map((_, i) => (
+                <div key={i} className="info-item">
+                  <div className="flex items-center gap-3">
+                    <div className="loading-shimmer h-8 w-8 rounded-lg"></div>
+                    <div className="flex-1">
+                      <div className="loading-shimmer h-3 rounded w-1/3 mb-2"></div>
+                      <div className="loading-shimmer h-4 rounded w-2/3"></div>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </CardContent>
@@ -326,6 +346,11 @@ export default function DeviceInfoCard() {
       icon: <Clock className="h-4 w-4" />,
       label: "Timezone:",
       value: deviceInfo.timezone
+    },
+    {
+      icon: <Code className="h-4 w-4" />,
+      label: "User agent:",
+      value: deviceInfo.userAgent
     }
   ];
 
@@ -360,51 +385,74 @@ export default function DeviceInfoCard() {
       icon: <Clock className="h-4 w-4" />,
       label: "Timezone connection:",
       value: deviceInfo.timezoneConnection
+    },
+    {
+      icon: <Mail className="h-4 w-4" />,
+      label: "Postal:",
+      value: deviceInfo.postal
     }
   ];
 
   return (
-    <Card className="w-full">
-      <CardHeader className="pb-2">
-        <CardTitle className="flex items-center gap-2 text-base">
-          <Monitor className="h-4 w-4" />
-          Device Information
+    <Card className="enhanced-card w-full">
+      <CardHeader className="enhanced-card-header pb-4">
+        <CardTitle className="flex items-center gap-3 text-lg">
+          <div className="info-icon">
+            <Monitor className="h-5 w-5" />
+          </div>
+          <span className="text-gradient">Device Information</span>
         </CardTitle>
       </CardHeader>
       <CardContent className="pt-0">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* 左侧信息 */}
-          <div className="space-y-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* 左侧信息 - System Info */}
+          <div className="space-y-3">
+            <div className="mb-4">
+              <h3 className="text-sm font-semibold text-primary mb-2 flex items-center gap-2">
+                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                System Information
+              </h3>
+            </div>
             {leftItems.map((item, index) => (
-              <div key={index} className="flex items-center gap-2 p-2 rounded-lg bg-gray-50 dark:bg-gray-800">
-                <div className="text-blue-600 dark:text-blue-400">
-                  {item.icon}
-                </div>
-                <div className="flex-1">
-                  <span className="text-xs font-medium text-gray-600 dark:text-gray-400">
-                    {item.label}
-                  </span>
-                  <div className="text-sm font-semibold text-gray-900 dark:text-gray-100">
-                    {item.value}
+              <div key={index} className="info-item" style={{"--stagger-delay": index} as React.CSSProperties}>
+                <div className="flex items-center gap-3">
+                  <div className="info-icon text-blue-600 dark:text-blue-400">
+                    {item.icon}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-xs font-medium text-secondary-enhanced mb-1">
+                      {item.label}
+                    </div>
+                    <div className="text-sm font-semibold text-enhanced truncate">
+                      {item.value}
+                    </div>
                   </div>
                 </div>
               </div>
             ))}
           </div>
           
-          {/* 右侧信息 */}
-          <div className="space-y-2">
+          {/* 右侧信息 - Network Info */}
+          <div className="space-y-3">
+            <div className="mb-4">
+              <h3 className="text-sm font-semibold text-primary mb-2 flex items-center gap-2">
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                Network Information
+              </h3>
+            </div>
             {rightItems.map((item, index) => (
-              <div key={index} className="flex items-center gap-2 p-2 rounded-lg bg-gray-50 dark:bg-gray-800">
-                <div className="text-green-600 dark:text-green-400">
-                  {item.icon}
-                </div>
-                <div className="flex-1">
-                  <span className="text-xs font-medium text-gray-600 dark:text-gray-400">
-                    {item.label}
-                  </span>
-                  <div className="text-sm font-semibold text-gray-900 dark:text-gray-100">
-                    {item.value}
+              <div key={index} className="info-item" style={{"--stagger-delay": index + leftItems.length} as React.CSSProperties}>
+                <div className="flex items-center gap-3">
+                  <div className="info-icon text-green-600 dark:text-green-400">
+                    {item.icon}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-xs font-medium text-secondary-enhanced mb-1">
+                      {item.label}
+                    </div>
+                    <div className="text-sm font-semibold text-enhanced truncate">
+                      {item.value}
+                    </div>
                   </div>
                 </div>
               </div>
