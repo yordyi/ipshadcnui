@@ -1,5 +1,6 @@
 import IPLocationCard from "@/components/ip-location-card";
 import DeviceInfoCard from "@/components/device-info-card";
+import SummaryCard from "@/components/summary-card";
 
 export default function Home() {
   return (
@@ -10,8 +11,18 @@ export default function Home() {
           <IPLocationCard />
         </div>
         
-        {/* 设备信息卡片 - 全宽度 */}
-        <DeviceInfoCard />
+        {/* 主要内容区域 - 两列布局 */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          {/* 设备信息卡片 - 占据2列 */}
+          <div className="lg:col-span-2">
+            <DeviceInfoCard />
+          </div>
+          
+          {/* Summary卡片 - 占据1列 */}
+          <div className="lg:col-span-1">
+            <SummaryCard />
+          </div>
+        </div>
       </div>
     </div>
   );
